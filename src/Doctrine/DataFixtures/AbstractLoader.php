@@ -12,7 +12,7 @@
 namespace Hautelook\AliceBundle\Doctrine\DataFixtures;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Helper for declaring doctrine data loaders.
@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  * @author Baldur Rensch <brensch@gmail.com>
  * @author Théo FIDRY <theo.fidry@gmail.com>
  */
-abstract class AbstractLoader extends ContainerAware implements LoaderInterface
+abstract class AbstractLoader extends ContainerBuilder implements LoaderInterface
 {
     /**
      * Loads the fixtures files.
