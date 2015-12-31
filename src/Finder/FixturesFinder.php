@@ -37,14 +37,14 @@ class FixturesFinder implements FixturesFinderInterface
     /**
      * {@inheritdoc}
      */
-    public function getFixtures(KernelInterface $kernel, array $bundles, $environment)
+    public function getFixtures(KernelInterface $kernel, array $bundles, $environment, $container = null)
     {
         $loadersPaths = $this->getLoadersPaths($bundles, $environment);
 
         // Add all fixtures to the new Doctrine loader
         $fixtures = [];
         foreach ($loadersPaths as $path) {
-            $fixtures = array_merge($fixtures, $this->getFixturesFromDirectory($path));
+            $fixtures = array_merge($fixtures, $this->getFixturesFromDirectory($path, $container));
         }
 
         if (0 === count($fixtures)) {
@@ -114,7 +114,7 @@ class FixturesFinder implements FixturesFinderInterface
     /**
      * {@inheritdoc}
      */
-    public function getFixturesFromDirectory($path)
+    public function getFixturesFromDirectory($path, $container = null)
     {
         $fixtures = [];
 

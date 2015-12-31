@@ -5,3 +5,4 @@ tests/SymfonyApp/logs
 coverage.xml
 phpunit.xml
 .php_cs.cache
+.idea

@@ -34,7 +34,7 @@ interface FixturesFinderInterface
      *
      * @return string[] Fixtures files real paths.
      */
-    public function getFixtures(KernelInterface $kernel, array $bundles, $environment);
+    public function getFixtures(KernelInterface $kernel, array $bundles, $environment, $container = null);
 
     /**
      * Gets the real path of each fixtures via the application kernel.
@@ -57,5 +57,5 @@ interface FixturesFinderInterface
      *
      * @return string[]|\SplFileInfo[] Fixtures paths
      */
-    public function getFixturesFromDirectory($path);
+    public function getFixturesFromDirectory($path, $container = null);
 }

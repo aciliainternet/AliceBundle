@@ -21,7 +21,7 @@ use Hautelook\AliceBundle\Doctrine\Generator\LoaderGeneratorInterface;
 use Hautelook\AliceBundle\Finder\FixturesFinderInterface;
 use Hautelook\AliceBundle\Resolver\BundlesResolverInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,7 +34,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  *
  * @author Théo FIDRY <theo.fidry@gmail.com>
  */
-class LoadDataFixturesCommand extends Command
+class LoadDataFixturesCommand extends ContainerAwareCommand
 {
     /**
      * @var BundlesResolverInterface
@@ -183,7 +183,7 @@ class LoadDataFixturesCommand extends Command
             $bundles = $this->bundlesResolver->resolveBundles($application, $bundles);
         }
 
-        $fixtures = $this->fixturesFinder->getFixtures($application->getKernel(), $bundles, $environment);
+        $fixtures = $this->fixturesFinder->getFixtures($application->getKernel(), $bundles, $environment, $this->getContainer());
 
         $output->writeln(sprintf('  <comment>></comment> <info>%s</info>', 'fixtures found:'));
         foreach ($fixtures as $fixture) {
