@@ -11,6 +11,7 @@
 
 namespace Hautelook\AliceBundle\Doctrine\Finder;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Hautelook\AliceBundle\Doctrine\DataFixtures\LoaderInterface;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -29,18 +30,18 @@ class FixturesFinder extends \Hautelook\AliceBundle\Finder\FixturesFinder
      * Extended to look for data loaders. If a data loader is found, will take the fixtures from it instead of taking
      * all the fixtures files.
      */
-    public function getFixturesFromDirectory($path)
+    public function getFixturesFromDirectory($path, $container = null)
     {
         $fixtures = [];
 
-        $loaders = $this->getDataLoadersFromDirectory($path);
+        $loaders = $this->getDataLoadersFromDirectory($path, $container);
         foreach ($loaders as $loader) {
             $fixtures = array_merge($fixtures, $loader->getFixtures());
         }
 
         // If no data loader is found, takes all fixtures files
         if (0 === count($loaders)) {
-            return parent::getFixturesFromDirectory($path);
+            return parent::getFixturesFromDirectory($path, $container);
         }
 
         return $fixtures;
@@ -76,7 +77,7 @@ class FixturesFinder extends \Hautelook\AliceBundle\Finder\FixturesFinder
      *
      * @return LoaderInterface[]
      */
-    private function getDataLoadersFromDirectory($path)
+    private function getDataLoadersFromDirectory($path, $container = null)
     {
         $loaders = [];
 
@@ -97,6 +98,10 @@ class FixturesFinder extends \Hautelook\AliceBundle\Finder\FixturesFinder
             if (true === isset($phpClasses[$sourceFile])) {
                 if ($reflectionClass->implementsInterface('Hautelook\AliceBundle\Doctrine\DataFixtures\LoaderInterface')) {
                     $loaders[$className] = new $className();
+
+                    if ($loaders[$className] instanceof ContainerAwareInterface) {
+                        $loaders[$className]->setContainer($container);
+                    }
                 }
             }
         }
